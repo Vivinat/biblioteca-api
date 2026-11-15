@@ -38,12 +38,12 @@ class BookControllerTest {
 		mockMvc.perform(post("/books")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-						{"title": "Senhor dos Aneis", "author": "JRR Tolkien", "publicationYear": 1954}
+						{"titulo": "Senhor dos Aneis", "autor": "JRR Tolkien", "anoPublicacao": 1954}
 						"""))
 				.andExpect(status().isCreated())
 				.andExpect(header().string("Location", endsWith("/books/1")))
 				.andExpect(jsonPath("$.id").value(1))
-				.andExpect(jsonPath("$.title").value("Senhor dos Aneis"));
+				.andExpect(jsonPath("$.titulo").value("Senhor dos Aneis"));
 	}
 
 	@Test
@@ -51,7 +51,7 @@ class BookControllerTest {
 		mockMvc.perform(post("/books")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-                {"title": "", "author": "Fulano", "publicationYear": 1954}
+                {"titulo": "", "autor": "Fulano", "anoPublicacao": 1954}
                 """))
 				.andExpect(status().isBadRequest());
 
@@ -76,8 +76,8 @@ class BookControllerTest {
 		mockMvc.perform(get("/books"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(2)))
-				.andExpect(jsonPath("$[0].title").value("Senhor dos Aneis"))
-				.andExpect(jsonPath("$[1].title").value("Fractais Monocromaticos"));
+				.andExpect(jsonPath("$[0].titulo").value("Senhor dos Aneis"))
+				.andExpect(jsonPath("$[1].titulo").value("Fractais Monocromaticos"));
 	}
 
 	@Test
@@ -98,7 +98,7 @@ class BookControllerTest {
 		mockMvc.perform(get("/books/1"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(1))
-				.andExpect(jsonPath("$.title").value("Senhor dos Aneis"));
+				.andExpect(jsonPath("$.titulo").value("Senhor dos Aneis"));
 	}
 
 	@Test
@@ -124,11 +124,11 @@ class BookControllerTest {
 		mockMvc.perform(put("/books/1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-						{"title": "Senhor dos Aneis", "author": "JRR Tolkien", "publicationYear": 1954}
+						{"titulo": "Senhor dos Aneis", "autor": "JRR Tolkien", "anoPublicacao": 1954}
 						"""))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(1))
-				.andExpect(jsonPath("$.title").value("Senhor dos Aneis"));
+				.andExpect(jsonPath("$.titulo").value("Senhor dos Aneis"));
 	}
 
 	@Test
@@ -139,7 +139,7 @@ class BookControllerTest {
 		mockMvc.perform(put("/books/9999")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-						{"title": "Senhor dos Aneis", "author": "JRR Tolkien", "publicationYear": 1954}
+						{"titulo": "Senhor dos Aneis", "autor": "JRR Tolkien", "anoPublicacao": 1954}
 						"""))
 				.andExpect(status().isNotFound());
 	}
@@ -149,7 +149,7 @@ class BookControllerTest {
 		mockMvc.perform(put("/books/1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-						{"title": "", "author": "JRR Tolkien", "publicationYear": 1954}
+						{"titulo": "", "autor": "JRR Tolkien", "anoPublicacao": 1954}
 						"""))
 				.andExpect(status().isBadRequest());
 

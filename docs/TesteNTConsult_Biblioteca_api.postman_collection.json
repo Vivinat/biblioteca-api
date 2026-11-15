@@ -13,7 +13,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\"title\": \"O Senhor dos Aneis\", \"author\": \"J.R.R. Tolkien\", \"publicationYear\": 1954}",
+          "raw": "{\"titulo\": \"O Senhor dos Aneis\", \"autor\": \"J.R.R. Tolkien\", \"anoPublicacao\": 1954}",
           "options": {
             "raw": {
               "language": "json"
@@ -80,7 +80,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\"title\": \"Dom Casmurro\", \"author\": \"Machado de Assis\", \"publicationYear\": 1899}",
+          "raw": "{\"titulo\": \"Dom Casmurro\", \"autor\": \"Machado de Assis\", \"anoPublicacao\": 1899}",
           "options": {
             "raw": {
               "language": "json"
@@ -129,7 +129,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\"title\": \"\", \"author\": \"Machado de Assis\", \"publicationYear\": 1899}",
+          "raw": "{\"titulo\": \"\", \"autor\": \"Machado de Assis\", \"anoPublicacao\": 1899}",
           "options": {
             "raw": {
               "language": "json"

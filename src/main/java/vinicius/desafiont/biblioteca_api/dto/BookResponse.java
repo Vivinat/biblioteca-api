@@ -1,9 +1,9 @@
 package vinicius.desafiont.biblioteca_api.dto;
 
-import vinicius.desafiont.biblioteca_api.model.Book;
+import vinicius.desafiont.biblioteca_api.model.Livro;
 
-public record BookResponse(Long id, String title, String author, Integer publicationYear){
-    public static BookResponse from(Book book) {
-        return new BookResponse(book.getId(), book.getTitle(), book.getAuthor(), book.getPublicationYear());
+public record BookResponse(Long id, String titulo, String autor, Integer anoPublicacao){
+    public static BookResponse from(Livro livro) {
+        return new BookResponse(livro.getId(), livro.getTitulo(), livro.getAutor(), livro.getAnoPublicacao());
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import vinicius.desafiont.biblioteca_api.dto.BookRequest;
 import vinicius.desafiont.biblioteca_api.dto.BookResponse;
 import vinicius.desafiont.biblioteca_api.exception.BookNotFoundException;
-import vinicius.desafiont.biblioteca_api.model.Book;
+import vinicius.desafiont.biblioteca_api.model.Livro;
 import vinicius.desafiont.biblioteca_api.repository.BookRepository;
 import vinicius.desafiont.biblioteca_api.service.BookService;
 
@@ -36,19 +36,19 @@ class BookServiceTest {
 
 		var request = new BookRequest("Senhor dos Aneis", "JRR Tolkien", 1954);
 
-		when(repository.save(any(Book.class))).thenAnswer(invoke -> {
-			Book book = invoke.getArgument(0);
-			ReflectionTestUtils.setField(book, "id", 1L);
-			return book;
+		when(repository.save(any(Livro.class))).thenAnswer(invoke -> {
+			Livro livro = invoke.getArgument(0);
+			ReflectionTestUtils.setField(livro, "id", 1L);
+			return livro;
 		});
 
 		BookResponse response = service.create(request);
 
 		assertThat(response.id()).isEqualTo(1L);
-		assertThat(response.title()).isEqualTo("Senhor dos Aneis");
-		assertThat(response.author()).isEqualTo("JRR Tolkien");
-		assertThat(response.publicationYear()).isEqualTo(1954);
-		verify(repository).save(any(Book.class));
+		assertThat(response.titulo()).isEqualTo("Senhor dos Aneis");
+		assertThat(response.autor()).isEqualTo("JRR Tolkien");
+		assertThat(response.anoPublicacao()).isEqualTo(1954);
+		verify(repository).save(any(Livro.class));
 	}
 
 	@Test
@@ -62,14 +62,14 @@ class BookServiceTest {
 
 	@Test
 	void shouldReturnAllBooks(){
-		var firstRequest = new Book("Senhor dos Aneis", "JRR Tolkien", 1954);
-		var secondRequest = new Book("Fractais Monocromaticos", "Vinicius Mota", 2026);
+		var firstRequest = new Livro("Senhor dos Aneis", "JRR Tolkien", 1954);
+		var secondRequest = new Livro("Fractais Monocromaticos", "Vinicius Mota", 2026);
 		when(repository.findAll()).thenReturn(List.of(firstRequest,secondRequest));
 
 		List<BookResponse> result = service.findAll();
 
 		assertThat(result).hasSize(2);
-		assertThat(result).extracting(BookResponse::title).containsExactly("Senhor dos Aneis","Fractais Monocromaticos");
+		assertThat(result).extracting(BookResponse::titulo).containsExactly("Senhor dos Aneis","Fractais Monocromaticos");
 	}
 
 	@Test
@@ -81,11 +81,11 @@ class BookServiceTest {
 
 	@Test
 	void shouldDeleteExistingBook(){
-		var book = new Book("Senhor dos Aneis", "JRR Tolkien", 1954);
-		when(repository.findById(1L)).thenReturn(Optional.of(book));
+		var livro = new Livro("Senhor dos Aneis", "JRR Tolkien", 1954);
+		when(repository.findById(1L)).thenReturn(Optional.of(livro));
 
 		service.delete(1L);
-		verify(repository).delete(book);
+		verify(repository).delete(livro);
 
 	}
 
@@ -102,17 +102,17 @@ class BookServiceTest {
 
 	@Test
 	void shouldUpdateExistingBook(){
-		var book = new Book("Senhor dos Aneis", "JRR Tolkien", 1954);
-		when(repository.findById(1L)).thenReturn(Optional.of(book));
+		var livro = new Livro("Senhor dos Aneis", "JRR Tolkien", 1954);
+		when(repository.findById(1L)).thenReturn(Optional.of(livro));
 		var request = new BookRequest("Fractais Monocromaticos", "Vinicius Mota", 2026);
 
 		BookResponse response = service.update(1L, request);
 
-		assertThat(response.title()).isEqualTo("Fractais Monocromaticos");
-		assertThat(response.author()).isEqualTo("Vinicius Mota");
-		assertThat(response.publicationYear()).isEqualTo(2026);
+		assertThat(response.titulo()).isEqualTo("Fractais Monocromaticos");
+		assertThat(response.autor()).isEqualTo("Vinicius Mota");
+		assertThat(response.anoPublicacao()).isEqualTo(2026);
 
-		assertThat(book.getTitle()).isEqualTo("Fractais Monocromaticos");
+		assertThat(livro.getTitulo()).isEqualTo("Fractais Monocromaticos");
 
 		verify(repository, never()).save(any());
 	}

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import vinicius.desafiont.biblioteca_api.dto.BookRequest;
 import vinicius.desafiont.biblioteca_api.dto.BookResponse;
 import vinicius.desafiont.biblioteca_api.exception.BookNotFoundException;
-import vinicius.desafiont.biblioteca_api.model.Book;
+import vinicius.desafiont.biblioteca_api.model.Livro;
 import vinicius.desafiont.biblioteca_api.repository.BookRepository;
 
 import java.util.List;
@@ -20,8 +20,8 @@ public class BookService {
     }
 
     public BookResponse create (BookRequest request){
-        Book book = new Book(request.title(), request.author(), request.publicationYear());
-        return BookResponse.from(repository.save(book));
+        Livro livro = new Livro(request.titulo(), request.autor(), request.anoPublicacao());
+        return BookResponse.from(repository.save(livro));
     }
 
     public BookResponse findById(Long id){
@@ -38,12 +38,12 @@ public class BookService {
 
     @Transactional
     public BookResponse update(Long id, BookRequest request) {
-        Book book = searchEntityById(id);
-        book.updateBook(request.title(), request.author(), request.publicationYear());
-        return BookResponse.from(book);
+        Livro livro = searchEntityById(id);
+        livro.updateBook(request.titulo(), request.autor(), request.anoPublicacao());
+        return BookResponse.from(livro);
     }
 
-    private Book searchEntityById(Long id) {
+    private Livro searchEntityById(Long id) {
         return repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
