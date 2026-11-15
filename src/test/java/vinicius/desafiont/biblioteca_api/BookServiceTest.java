@@ -100,4 +100,31 @@ class BookServiceTest {
 		verify(repository, never()).delete(any());
 	}
 
+	@Test
+	void shouldUpdateExistingBook(){
+		var book = new Book("Senhor dos Aneis", "JRR Tolkien", 1954);
+		when(repository.findById(1L)).thenReturn(Optional.of(book));
+		var request = new BookRequest("Fractais Monocromaticos", "Vinicius Mota", 2026);
+
+		BookResponse response = service.update(1L, request);
+
+		assertThat(response.title()).isEqualTo("Fractais Monocromaticos");
+		assertThat(response.author()).isEqualTo("Vinicius Mota");
+		assertThat(response.publicationYear()).isEqualTo(2026);
+
+		assertThat(book.getTitle()).isEqualTo("Fractais Monocromaticos");
+
+		verify(repository, never()).save(any());
+	}
+
+	@Test
+	void shouldThrowExceptionWhenUpdatingNonexistentBook(){
+		when(repository.findById(9999L)).thenReturn(Optional.empty());
+		var request = new BookRequest("Fractais Monocromaticos", "Vinicius Mota", 2026);
+
+		assertThatThrownBy(() -> service.update(9999L, request))
+				.isInstanceOf(BookNotFoundException.class)
+				.hasMessageContaining("9999");
+	}
+
 }
