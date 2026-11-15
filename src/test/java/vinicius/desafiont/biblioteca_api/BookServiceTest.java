@@ -13,10 +13,11 @@ import vinicius.desafiont.biblioteca_api.model.Book;
 import vinicius.desafiont.biblioteca_api.repository.BookRepository;
 import vinicius.desafiont.biblioteca_api.service.BookService;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,7 +35,7 @@ class BookServiceTest {
 	@Test
 	void shouldCreateRequestedBook() {
 
-		var request = new BookRequest("Senhor dos Anéis", "JRR Tolkien", 1937);
+		var request = new BookRequest("Senhor dos Aneis", "JRR Tolkien", 1954);
 
 		when(repository.save(any(Book.class))).thenAnswer(invoke -> {
 			Book book = invoke.getArgument(0);
@@ -45,9 +46,9 @@ class BookServiceTest {
 		BookResponse response = service.create(request);
 
 		assertThat(response.id()).isEqualTo(1L);
-		assertThat(response.title()).isEqualTo("Senhor dos Anéis");
+		assertThat(response.title()).isEqualTo("Senhor dos Aneis");
 		assertThat(response.author()).isEqualTo("JRR Tolkien");
-		assertThat(response.publicationYear()).isEqualTo(1937);
+		assertThat(response.publicationYear()).isEqualTo(1954);
 		verify(repository).save(any(Book.class));
 	}
 
@@ -58,6 +59,25 @@ class BookServiceTest {
 		assertThatThrownBy(() -> service.searchForId(9999L))
 				.isInstanceOf(BookNotFoundException.class)
 				.hasMessageContaining("9999");
+	}
+
+	@Test
+	void shouldReturnAllBooks(){
+		var firstRequest = new Book("Senhor dos Aneis", "JRR Tolkien", 1954);
+		var secondRequest = new Book("Fractais Monocromaticos", "Vinicius Mota", 2026);
+		when(repository.findAll()).thenReturn(List.of(firstRequest,secondRequest));
+
+		List<BookResponse> result = service.findAll();
+
+		assertThat(result).hasSize(2);
+		assertThat(result).extracting(BookResponse::title).containsExactly("Senhor dos Aneis","Fractais Monocromaticos");
+	}
+
+	@Test
+	void shouldReturnEmptyListWhenNoBooks(){
+		when(repository.findAll()).thenReturn(List.of());
+
+		assertThat(service.findAll()).isEmpty();
 	}
 
 }

@@ -7,6 +7,8 @@ import vinicius.desafiont.biblioteca_api.exception.BookNotFoundException;
 import vinicius.desafiont.biblioteca_api.model.Book;
 import vinicius.desafiont.biblioteca_api.repository.BookRepository;
 
+import java.util.List;
+
 @Service
 public class BookService {
 
@@ -18,14 +20,18 @@ public class BookService {
 
     public BookResponse create (BookRequest request){
         Book book = new Book(request.title(), request.author(), request.publicationYear());
-        return BookResponse.de(repository.save(book));
+        return BookResponse.from(repository.save(book));
     }
 
     public BookResponse searchForId(Long id){
-        return BookResponse.de(searchEntityById(id));
+        return BookResponse.from(searchEntityById(id));
     }
 
     private Book searchEntityById(Long id) {
         return repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    }
+
+    public List<BookResponse> findAll() {
+        return repository.findAll().stream().map(BookResponse::from).toList();
     }
 }

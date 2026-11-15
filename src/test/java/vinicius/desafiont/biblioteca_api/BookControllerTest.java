@@ -30,12 +30,12 @@ class BookControllerTest {
 	@Test
 	void shouldReturn201WhenCreated() throws Exception {
 		when(service.create(any()))
-				.thenReturn(new BookResponse(1L, "Senhor dos Aneis", "JRR Tolkien", 1937));
+				.thenReturn(new BookResponse(1L, "Senhor dos Aneis", "JRR Tolkien", 1954));
 
 		mockMvc.perform(post("/books")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-						{"title": "Senhor dos Aneis", "author": "JRR Tolkien", "publicationYear": 1937}
+						{"title": "Senhor dos Aneis", "author": "JRR Tolkien", "publicationYear": 1954}
 						"""))
 				.andExpect(status().isCreated())
 				.andExpect(header().string("Location", endsWith("/books/1")))
@@ -48,7 +48,7 @@ class BookControllerTest {
 		mockMvc.perform(post("/books")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-                {"title": "", "author": "Fulano", "publicationYear": 1937}
+                {"title": "", "author": "Fulano", "publicationYear": 1954}
                 """))
 				.andExpect(status().isBadRequest());
 
