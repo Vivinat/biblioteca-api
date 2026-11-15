@@ -6,41 +6,41 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import vinicius.desafiont.biblioteca_api.controller.LivroController;
-import vinicius.desafiont.biblioteca_api.dto.LivroResponse;
-import vinicius.desafiont.biblioteca_api.exception.LivroNaoEncontradoException;
-import vinicius.desafiont.biblioteca_api.service.LivroService;
+import vinicius.desafiont.biblioteca_api.controller.BookController;
+import vinicius.desafiont.biblioteca_api.dto.BookResponse;
+import vinicius.desafiont.biblioteca_api.exception.BookNotFoundException;
+import vinicius.desafiont.biblioteca_api.service.BookService;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.endsWith;
+import static org.hamcrest.Matchers.endsWith;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-@WebMvcTest(LivroController.class)
-class LivroControllerTest {
+@WebMvcTest(BookController.class)
+class BookControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockitoBean
-	private LivroService service;
+	private BookService service;
 
 	@Test
 	void shouldReturn201WhenCreated() throws Exception {
 		when(service.create(any()))
-				.thenReturn(new LivroResponse(1L, "Senhor dos Aneis", "JRR Tolkien", 1937));
+				.thenReturn(new BookResponse(1L, "Senhor dos Aneis", "JRR Tolkien", 1937));
 
 		mockMvc.perform(post("/books")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-						{"titulo": "Senhor dos Aneis", "autor": "JRR Tolkien", "anoPublicacao": 1937}
+						{"title": "Senhor dos Aneis", "author": "JRR Tolkien", "publicationYear": 1937}
 						"""))
 				.andExpect(status().isCreated())
 				.andExpect(header().string("Location", endsWith("/books/1")))
 				.andExpect(jsonPath("$.id").value(1))
-				.andExpect(jsonPath("$.titulo").value("Senhor dos Aneis"));
+				.andExpect(jsonPath("$.title").value("Senhor dos Aneis"));
 	}
 
 	@Test
@@ -48,7 +48,7 @@ class LivroControllerTest {
 		mockMvc.perform(post("/books")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
-                {"titulo": "", "autor": "Fulano", "anoPublicacao": 1937}
+                {"title": "", "author": "Fulano", "publicationYear": 1937}
                 """))
 				.andExpect(status().isBadRequest());
 
@@ -57,7 +57,7 @@ class LivroControllerTest {
 
 	@Test
 	void shouldReturn404WhenBookDoesNotExist() throws Exception {
-		when(service.searchForId(9999L)).thenThrow(new LivroNaoEncontradoException(9999L));
+		when(service.searchForId(9999L)).thenThrow(new BookNotFoundException(9999L));
 
 		mockMvc.perform(get("/books/9999"))
 				.andExpect(status().isNotFound());

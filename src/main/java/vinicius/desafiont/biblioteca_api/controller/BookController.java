@@ -4,25 +4,25 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import vinicius.desafiont.biblioteca_api.dto.LivroRequest;
-import vinicius.desafiont.biblioteca_api.dto.LivroResponse;
-import vinicius.desafiont.biblioteca_api.service.LivroService;
+import vinicius.desafiont.biblioteca_api.dto.BookRequest;
+import vinicius.desafiont.biblioteca_api.dto.BookResponse;
+import vinicius.desafiont.biblioteca_api.service.BookService;
 
 import java.net.URI;
 
 @RestController
 @RequestMapping("/books")
-public class LivroController {
+public class BookController {
 
-    private final LivroService service;
+    private final BookService service;
 
-    public LivroController(LivroService service){
+    public BookController(BookService service){
         this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<LivroResponse> create(@RequestBody @Valid LivroRequest request){
-        LivroResponse created = service.create(request);
+    public ResponseEntity<BookResponse> create(@RequestBody @Valid BookRequest request){
+        BookResponse created = service.create(request);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(created.id())
@@ -31,7 +31,7 @@ public class LivroController {
     }
 
     @GetMapping("/{id}")
-    public LivroResponse searchForId(@PathVariable Long id){
+    public BookResponse searchForId(@PathVariable Long id){
         return service.searchForId(id);
     }
 
