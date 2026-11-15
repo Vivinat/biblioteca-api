@@ -9,13 +9,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import vinicius.desafiont.biblioteca_api.controller.BookController;
 import vinicius.desafiont.biblioteca_api.dto.BookResponse;
 import vinicius.desafiont.biblioteca_api.exception.BookNotFoundException;
+import vinicius.desafiont.biblioteca_api.model.Book;
 import vinicius.desafiont.biblioteca_api.service.BookService;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.hamcrest.Matchers.endsWith;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -100,6 +100,20 @@ class BookControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(1))
 				.andExpect(jsonPath("$.title").value("Senhor dos Aneis"));
+	}
+
+	@Test
+	void shouldReturn204WhenBookDeleted() throws Exception {
+		mockMvc.perform(delete("/books/1")).andExpect(status().isNoContent());
+
+		verify(service).delete(1L);
+	}
+
+	@Test
+	void shouldReturn404WhenDeletingNonexistentBook() throws Exception {
+		doThrow(new BookNotFoundException(9999L)).when(service).delete(9999L);
+
+		mockMvc.perform(delete("/books/9999")).andExpect(status().isNotFound());
 	}
 
 }
