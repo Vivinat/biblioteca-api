@@ -19,8 +19,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
@@ -78,6 +77,27 @@ class BookServiceTest {
 		when(repository.findAll()).thenReturn(List.of());
 
 		assertThat(service.findAll()).isEmpty();
+	}
+
+	@Test
+	void shouldDeleteExistingBook(){
+		var book = new Book("Senhor dos Aneis", "JRR Tolkien", 1954);
+		when(repository.findById(1L)).thenReturn(Optional.of(book));
+
+		service.delete(1L);
+		verify(repository).delete(book);
+
+	}
+
+	@Test
+	void shouldThrowErrorWhenDeletingNonexistentMovie(){
+		when(repository.findById(9999L)).thenReturn(Optional.empty());
+
+		assertThatThrownBy(() -> service.delete(9999L))
+				.isInstanceOf(BookNotFoundException.class)
+				.hasMessageContaining("9999");
+
+		verify(repository, never()).delete(any());
 	}
 
 }

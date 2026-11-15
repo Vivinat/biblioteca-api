@@ -27,11 +27,17 @@ public class BookService {
         return BookResponse.from(searchEntityById(id));
     }
 
+    public List<BookResponse> findAll() {
+        return repository.findAll().stream().map(BookResponse::from).toList();
+    }
+
+    public void delete(Long id){
+        repository.delete(searchEntityById(id));
+    }
+
     private Book searchEntityById(Long id) {
         return repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    public List<BookResponse> findAll() {
-        return repository.findAll().stream().map(BookResponse::from).toList();
-    }
+
 }
