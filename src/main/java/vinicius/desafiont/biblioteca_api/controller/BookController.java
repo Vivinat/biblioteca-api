@@ -47,4 +47,9 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public BookResponse update(@PathVariable Long id, @RequestBody @Valid BookRequest request){
+        return service.update(id, request);
+    }
+
 }

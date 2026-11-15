@@ -115,4 +115,45 @@ class BookControllerTest {
 		mockMvc.perform(delete("/books/9999")).andExpect(status().isNotFound());
 	}
 
+	@Test
+	void shouldReturn200WhenBookUpdated() throws Exception {
+
+		when(service.update(eq(1L), any()))
+				.thenReturn(new BookResponse(1L,"Senhor dos Aneis", "JRR Tolkien", 1954));
+
+		mockMvc.perform(put("/books/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"title": "Senhor dos Aneis", "author": "JRR Tolkien", "publicationYear": 1954}
+						"""))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id").value(1))
+				.andExpect(jsonPath("$.title").value("Senhor dos Aneis"));
+	}
+
+	@Test
+	void shouldReturn404WhenUpdatingNonexistentBook() throws Exception {
+		when(service.update(eq(9999L), any()))
+				.thenThrow(new BookNotFoundException(9999L));
+
+		mockMvc.perform(put("/books/9999")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"title": "Senhor dos Aneis", "author": "JRR Tolkien", "publicationYear": 1954}
+						"""))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	void shouldReturn400WhenUpdatingBookWithInvalidData() throws Exception{
+		mockMvc.perform(put("/books/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"title": "", "author": "JRR Tolkien", "publicationYear": 1954}
+						"""))
+				.andExpect(status().isBadRequest());
+		
+		verifyNoInteractions(service);
+	}
+
 }
