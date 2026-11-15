@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import vinicius.desafiont.biblioteca_api.controller.BookController;
 import vinicius.desafiont.biblioteca_api.dto.BookResponse;
 import vinicius.desafiont.biblioteca_api.exception.BookNotFoundException;
-import vinicius.desafiont.biblioteca_api.model.Book;
 import vinicius.desafiont.biblioteca_api.service.BookService;
 
 import static org.hamcrest.Matchers.hasSize;

@@ -90,7 +90,7 @@ class BookServiceTest {
 	}
 
 	@Test
-	void shouldThrowErrorWhenDeletingNonexistentMovie(){
+	void shouldThrowExceptionWhenDeletingNonexistentBook(){
 		when(repository.findById(9999L)).thenReturn(Optional.empty());
 
 		assertThatThrownBy(() -> service.delete(9999L))
