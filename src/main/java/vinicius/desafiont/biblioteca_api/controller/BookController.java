@@ -32,7 +32,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public BookResponse searchForId(@PathVariable Long id){
+    public BookResponse findById(@PathVariable Long id){
         return service.findById(id);
     }
 

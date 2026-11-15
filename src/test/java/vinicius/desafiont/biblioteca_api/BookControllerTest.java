@@ -91,7 +91,7 @@ class BookControllerTest {
 	}
 
 	@Test
-	void shouldReturn200WhenMovieExists() throws Exception {
+	void shouldReturn200WhenBookExists() throws Exception {
 
 		when(service.findById(1L))
 				.thenReturn (new BookResponse(1L,"Senhor dos Aneis", "JRR Tolkien", 1954));
