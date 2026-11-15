@@ -56,7 +56,7 @@ class BookServiceTest {
 	void shouldRaiseExceptionWhenBookDoesNotExist(){
 		when(repository.findById(9999L)).thenReturn(Optional.empty());
 
-		assertThatThrownBy(() -> service.searchForId(9999L))
+		assertThatThrownBy(() -> service.findById(9999L))
 				.isInstanceOf(BookNotFoundException.class)
 				.hasMessageContaining("9999");
 	}

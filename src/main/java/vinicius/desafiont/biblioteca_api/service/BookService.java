@@ -23,7 +23,7 @@ public class BookService {
         return BookResponse.from(repository.save(book));
     }
 
-    public BookResponse searchForId(Long id){
+    public BookResponse findById(Long id){
         return BookResponse.from(searchEntityById(id));
     }
 

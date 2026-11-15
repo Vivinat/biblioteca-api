@@ -9,6 +9,7 @@ import vinicius.desafiont.biblioteca_api.dto.BookResponse;
 import vinicius.desafiont.biblioteca_api.service.BookService;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/books")
@@ -32,7 +33,12 @@ public class BookController {
 
     @GetMapping("/{id}")
     public BookResponse searchForId(@PathVariable Long id){
-        return service.searchForId(id);
+        return service.findById(id);
+    }
+
+    @GetMapping
+    public List<BookResponse> findAll(){
+        return service.findAll();
     }
 
 }
