@@ -109,4 +109,20 @@ class BookIntegrationTest {
 				.andExpect(jsonPath("$.instance").value("/books/9999"));
 	}
 
+	@Test
+	void shouldReturnProblemDetailWhenRequestIsInvalid() throws Exception {
+		mockMvc.perform(post("/books")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("""
+                            {"titulo": "", "autor": "Machado de Assis", "anoPublicacao": 1899}
+                            """))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.title").value("Bad Request"))
+				.andExpect(jsonPath("$.instance").value("/books"));
+
+		assertThat(repository.count()).isZero();
+	}
+
 }

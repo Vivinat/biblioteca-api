@@ -3,11 +3,12 @@
     "_postman_id": "a6e5a0a5-9198-43f5-92e2-e00aa28f231c",
     "name": "TesteNTConsult",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "38198499"
+    "_exporter_id": "38198499",
+    "description": "Execute as requisições na ordem, com a aplicação recém-iniciada: os ids são fixos (/books/1) e o banco H2 em memória começa vazio."
   },
   "item": [
     {
-      "name": "CreateBook",
+      "name": "Create Book (201)",
       "request": {
         "method": "POST",
         "header": [],
@@ -35,7 +36,7 @@
       "response": []
     },
     {
-      "name": "Get All Books",
+      "name": "Get All Books (200)",
       "request": {
         "method": "GET",
         "header": [],
@@ -54,7 +55,7 @@
       "response": []
     },
     {
-      "name": "Get Book By Id",
+      "name": "Get Book By Id (200)",
       "request": {
         "method": "GET",
         "header": [],
@@ -74,7 +75,7 @@
       "response": []
     },
     {
-      "name": "Update Book By Id",
+      "name": "Update Book By Id (200)",
       "request": {
         "method": "PUT",
         "header": [],
@@ -103,7 +104,36 @@
       "response": []
     },
     {
-      "name": "Delete Book By Id",
+      "name": "Update Nonexistent Book (404)",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Dom Casmurro\", \"autor\": \"Machado de Assis\", \"anoPublicacao\": 1899}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/books/9999",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "books",
+            "9999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Book By Id (204)",
       "request": {
         "method": "DELETE",
         "header": [],
@@ -123,7 +153,27 @@
       "response": []
     },
     {
-      "name": "Create Book with Missing Data",
+      "name": "Get Deleted Book (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/books/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "books",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Book with Missing Data (400)",
       "request": {
         "method": "POST",
         "header": [],
