@@ -1,6 +1,6 @@
 package vinicius.desafiont.biblioteca_api.service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import vinicius.desafiont.biblioteca_api.dto.BookRequest;
 import vinicius.desafiont.biblioteca_api.dto.BookResponse;
@@ -36,14 +36,16 @@ public class BookService {
         repository.delete(searchEntityById(id));
     }
 
-    private Book searchEntityById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-    }
-
     @Transactional
     public BookResponse update(Long id, BookRequest request) {
         Book book = searchEntityById(id);
         book.updateBook(request.title(), request.author(), request.publicationYear());
         return BookResponse.from(book);
     }
+
+    private Book searchEntityById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    }
+
+
 }

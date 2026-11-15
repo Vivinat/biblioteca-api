@@ -81,7 +81,7 @@ class BookControllerTest {
 	}
 
 	@Test
-	void shouldReturn200withEmptyList() throws Exception {
+	void shouldReturn200WithEmptyList() throws Exception {
 		when(service.findAll()).thenReturn(List.of());
 
 		mockMvc.perform(get("/books"))
@@ -152,7 +152,7 @@ class BookControllerTest {
 						{"title": "", "author": "JRR Tolkien", "publicationYear": 1954}
 						"""))
 				.andExpect(status().isBadRequest());
-		
+
 		verifyNoInteractions(service);
 	}
 
